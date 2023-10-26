@@ -43,13 +43,13 @@ def listcourses():
 def listdrivers():
     connection = getCursor()
     sql = """ SELECT driver.driver_id
-            , concat(driver.first_name,' ',driver.surname) AS driverName
+            , CONCAT(driver.first_name,' ',driver.surname) AS driverName
             , car.model
             , car.drive_class
-            , if (driver.age <= 25,1,0) AS isJunior
+            , IF (driver.age <= 25,1,0) AS isJunior
             FROM motorkhana.driver
             JOIN motorkhana.car ON driver.car = car.car_num
-            LEFT JOIN motorkhana.driver as caregiver on driver.caregiver= caregiver.driver_id
+            LEFT JOIN motorkhana.driver AS caregiver ON driver.caregiver= caregiver.driver_id
             ORDER BY driver.surname, driver.first_name
             ;"""
     connection.execute(sql)
@@ -64,19 +64,19 @@ def listdriversfilter():
     driverID = request.args.get('driverid')
     connection = getCursor()
     sql1 = """SELECT driver.driver_id
-        , concat(driver.first_name,' ',driver.surname) AS driver_name
+        , CONCAT(driver.first_name,' ',driver.surname) AS driver_name
         , car.model
         , car.drive_class
         , course.name AS course_name
         , run.run_num 
         , run.seconds
         , run.cones
-        , if(run.wd =1, "WD","") AS wd
-        , ifnull(round((run.seconds + ifnull(run.cones,0) *5 + run.wd * 10),2),'dnf')AS run_total
+        , IF(run.wd =1, "WD","") AS wd
+        , IFNULL(ROUND((run.seconds + IFNULL(run.cones,0) *5 + run.wd * 10),2),'dnf')AS run_total
             FROM motorkhana.driver
-            JOIN motorkhana.car on driver.car = car.car_num
+            JOIN motorkhana.car ON driver.car = car.car_num
             LEFT JOIN motorkhana.run ON run.dr_id = driver.driver_id
-            JOIN motorkhana.course ON course.course_id = run.crs_id
+            JOIN motorkhana.course ON course.course_id = run.crs_id;
             """
     if request.method =='POST':
         sql2 = "WHERE driver.driver_id= %s"
