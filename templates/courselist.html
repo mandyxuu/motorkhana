@@ -2,7 +2,7 @@
 {% block content %}
 
 <h2>Course List</h2>
-<h3>current competition courses</h3>
+<h3>Current Competition Courses</h3>
 
 <!-- code to display list of courses-->
 <table>
@@ -13,9 +13,9 @@
     </tr>
     {% for course in course_list %}
         <tr>
-            {% for field in course %}
-                <td>{{field}}</td>
-            {% endfor %}
+            <td>{{course.0}}</td>
+            <td>{{course.1}}</td>
+            <td><img src="static/{{course.2}}" alt="" width='200' ></td>
         </tr>
     {% endfor %}
 </table>

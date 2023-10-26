@@ -1,0 +1,31 @@
+{% extends "admin.html" %}
+{% block content %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Drivers List</title>
+</head>
+<body>
+    <h2>Junior Drivers List</h2>
+    <table class="table table-bordered">
+        <tr>
+            <th>Driver_ID</th>
+            <th>Surname</th>
+            <th>Firstname</th>
+            <th>Age</th>
+            <th>Caregiver</th>
+        </tr>
+        {% for driver in junior_driver %}
+        <tr>
+           {% for entry in driver %}
+            <td>{{ entry }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+</body>
+</html>
+

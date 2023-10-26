@@ -1,0 +1,53 @@
+{% extends "admin.html" %}
+{% block content %}
+<head>
+    <title>Edit Runs</title>
+</head>
+<body>
+    <h1>Edit Runs</h1>
+    <form  action="editruns" method="post">
+
+    <p>
+        <label for = "driver_select">Select Driver:</label>
+        <select name="driver_id" id="driver_select" >
+            <option>&lt;Select a driver&gt;</option>
+            {% for driver in driver_list %}
+                <option value="{{driver[0]}}">{{driver[1]}}</option>
+            {% endfor %}
+        </select>
+    </p>
+    <p>
+        <label for="course_select">Course select</label>
+        <select id="course_select" name="course_id" >
+            <option>&lt;Select a course&gt;</option>
+            {% for course in course_list %}
+                <option value="{{course[0]}}">{{course[1]}}</option>
+            {% endfor %}
+        </select>
+    </p>
+
+<p>
+    <label for = "run_num">Run Number:</label>
+    <select id ="run_num" name = "run_num">
+        <option value = 1>1</option>
+        <option value = 2>2</option>
+    </select>
+</p>
+<p>
+    <label for = "run_time">Run Time:</label>
+   <input type="text"  id = "run_time" name="run_time" value = "{{run_time}}"/>
+
+   <label for = "cones">Cones:</label>
+   <input type="text" id="cones" name = "cones" value = "{{cones}}"/>
+
+   <label for = "wd">Wrong Direction</label>
+   <input type="checkbox" id = "wd" name ="wd" value = "1"{% if wd ==1 %}checked {% endif %}>
+
+   <input type = "submit" value = "Save">
+</p>
+</form>
+</section>
+
+</body>
+
+{% endblock %}

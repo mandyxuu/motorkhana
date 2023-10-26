@@ -1,0 +1,48 @@
+{% extends "admin.html" %}
+{% block content %}
+<head>
+    <title>Add Driver</title>
+</head>
+<body>
+    <h1>Add Driver</h1>
+    <form action = "/adddriver" method ="post">
+        <p>
+            <label for="first_name">First Name:</label>
+            <input type = "text" id = "first_name" name = "first_name" required>
+        </p> 
+        <p>
+            <label for="last_name">Last Name:</label>
+            <input type = "text" id = "last_name" name = "last_name" required>
+        </p>
+
+        <div class="form-control">
+            <label for="date_of_birth">Date of Birth (Between 12 and 25 years old):</label>
+            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
+                min="1998-01-01" max="2011-10-31" >
+        </div>
+           
+        <p>
+            <label for = "car">Select a car</label>
+            <select id = "car" name = "car" required>
+                {% for car in car_list %}
+                <option value ="{{car[0]}}">{{car[1]}}</option>
+                {% endfor %}
+            </select>
+        </p>
+
+        <div class="form-control">
+            <label for ="caregiver">Select a Caregiver (if you are under 16 years old):</label>
+            <select id="caregiver_id" name="caregiver_id">
+                <option value =""></option>
+
+                {% for caregiver in caregiver_list %}
+                <option value ="{{caregiver[0]}}">{{caregiver[1]}}</option>
+                {% endfor %}
+            </select>
+        </div>
+            <input type ="submit" value = "Add Driver">
+           
+    </form>  
+   
+</body>
+{% endblock %}

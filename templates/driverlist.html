@@ -5,8 +5,24 @@
 
 <h2>Driver List</h2>
 
-<p>For the Milestone submission, this page just needs to display this text successfully in your browser.</p>
+    <table class="table table-group-divider">
+        <tr>
+            <th>Driver_ID</th>
+            <th>Driver Name</th>
+            <th>Car Model</th>
+            <th>Drive Class</th>
 
-<p>Add the driver list here for your final submission.</p>
+        </tr>
+        {% for driver in driver_list %}
+            
+            <tr {% if driver.4 == 1 %} class="table-warning"{% endif %}>
+                
+                <td>{{driver.0}}</td>
+                <td><a href="listdrivers/filter?driverid={{driver.0}}">{{driver.1}}</a></td>
+                <td>{{driver.2}}</td>
+                <td>{{driver.3}}</td>
 
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

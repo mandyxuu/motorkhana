@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- code in here to display a list of books-->
+<h2>Run Detail</h2>
+
+<table class="table table-bordered">
+    
+    <tr>
+        <th>Driver ID</th>
+        <th>Driver Name</th>
+        <th>Car Model</th>
+        <th>Course A</th>
+        <th>Course B</th>
+        <th>Course C</th>
+        <th>Course D</th>
+        <th>Course E</th>
+        <th>Course F</th>
+        <th>Overall Results </th>
+        <th>Award </th>
+
+
+    </tr>
+    {% for run in over_all %}
+        <tr{% if "J" in run.1 %} class="table-warning"{% endif %}>
+            <td>{{run.0}}</td>
+            <td>{{run.1}}</td>
+            <td>{{run.2}}</td>
+            <td>
+                {% if run.3 == None %}
+                    <span>dnf</span>
+                {% else %}
+                    {{ run.3 }}
+                {% endif %}
+            </td>           
+             <td>
+                {% if run.4 == None %}
+                    <span>dnf</span>
+                {% else %}
+                    {{ run.4 }}
+                {% endif %}
+            </td>
+            <td>
+                {% if run.5 == None %}
+                    <span>dnf</span>
+                {% else %}
+                    {{ run.5 }}
+                {% endif %}
+            </td>
+            <td>
+                {% if run.6 == None %}
+                    <span>dnf</span>
+                {% else %}
+                    {{ run.6 }}
+                {% endif %}
+            </td>
+            <td>
+                {% if run.7 == None %}
+                    <span>dnf</span>
+                {% else %}
+                    {{ run.7 }}
+                {% endif %}
+            </td>
+            <td>
+                {% if run.8 == None %}
+                    <span>dnf</span>
+                {% else %}
+                    {{ run.8 }}
+                {% endif %}
+            </td>
+            <td>{{run.9}}</td>
+            <td>{{run.10}}</td>
+
+                
+        {% endfor %}
+     </tr>
+</table>
+<p>NOTE: NQ: Not Qualified, dnf: did not finish</p>
+
+{% endblock %}

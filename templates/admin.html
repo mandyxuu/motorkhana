@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <nav>
+    <h1>Rakaia Motorkhana Mavens - Competition event</h1>
+    <h1><a href="{{ url_for('base') }}"> Home</a></h1>
+    <h1><a href="{{ url_for('admin') }}">Admin</a></h1>
+  </nav>
+    <ul>
+        <li><a href="{{ url_for('junior_drivers') }}">List Junior Drivers</a></li>
+        <li><a href="{{ url_for('driversearch') }}">Driver Search</a></li>
+        <li><a href="{{ url_for('editruns') }}">Edit Runs</a></li>
+        <li><a href="{{ url_for('adddrivers') }}">Add Drivers</a></li>
+      </ul>
+ 
+  <section class="content">
+    <header>
+      {% block header %}{% endblock %}
+    </header>
+    {% for message in get_flashed_messages() %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% block content %}
+
+    {% endblock %}
+  </section>
+
+<!-- Bootstrap's JavaScript bundle including Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+
+
+
+</html>

@@ -9,12 +9,16 @@
 
     <body>
       <nav>
-            <h1>Bankside Rakaia Motorkhana Mavens - Competition event</h1>
-            <ul>
-                <li><a href="{{ url_for('listdrivers') }}">List Drivers</a></li>
+            <h1>Rakaia Motorkhana Mavens - Competition event</a></h1>
+            <h2><a href="{{ url_for('base') }}">Home</a> &nbsp;|&nbsp;<a href="{{ url_for('admin') }}">Admin</a></h2>
+      </nav>
+              <ul>
                 <li><a href="{{ url_for('listcourses') }}">List Courses</a></li>
-            </ul>
-          </nav>
+                <li><a href="{{ url_for('listdrivers') }}">List Drivers</a></li>                
+                <li><a href="{{ url_for('listdriversfilter') }}">Driver Run Details</a></li>
+                <li><a href="{{ url_for('overall') }}">Overall Results</a></li>
+                <li><a href="{{ url_for('showgraph') }}">Top 5 drivers</a></li>
+              </ul>
           <section class="content">
             <header>
               {% block header %}{% endblock %}

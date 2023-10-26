@@ -1,0 +1,33 @@
+{% extends "admin.html" %}
+{% block content %}
+
+<!-- code in here to display a list of loans -->
+<!-- loanlist is the variable passed in containing list of loans -->
+
+<h2>Driver Search</h2>
+
+<form action="/driversearch" method="post">
+
+    <p>
+        <label>Driver Name: </label>
+        <input type="text" value="{{driver_name}}" name="driver">
+        <input type="submit" value="Filter" />
+        <input type="reset" value="Cancel" />
+    </p>
+</form>
+
+<table class="table table-striped">
+    <tr>
+        <th>Driver ID</th>
+        <th>Driver Name</th>
+    </tr>
+    {% for driver in driver_list %}
+        <tr>
+            <td>{{driver[0]}}</td>
+            <td><a href="editruns?driverid={{driver.0}}">{{driver.1}}</a></td>   
+        </tr>
+    {% endfor %}
+</table>
+
+
+{% endblock %}
