@@ -47,9 +47,9 @@ def listdrivers():
             , car.model
             , car.drive_class
             , IF (driver.age <= 25,1,0) AS isJunior
-            FROM motorkhana.driver
-            JOIN motorkhana.car ON driver.car = car.car_num
-            LEFT JOIN motorkhana.driver AS caregiver ON driver.caregiver= caregiver.driver_id
+            FROM driver
+            JOIN car ON driver.car = car.car_num
+            LEFT JOIN driver AS caregiver ON driver.caregiver= caregiver.driver_id
             ORDER BY driver.surname, driver.first_name
             ;"""
     connection.execute(sql)
@@ -73,10 +73,10 @@ def listdriversfilter():
         , run.cones
         , IF(run.wd =1, "WD","") AS wd
         , IFNULL(ROUND((run.seconds + IFNULL(run.cones,0) *5 + run.wd * 10),2),'dnf')AS run_total
-            FROM motorkhana.driver
-            JOIN motorkhana.car ON driver.car = car.car_num
-            LEFT JOIN motorkhana.run ON run.dr_id = driver.driver_id
-            JOIN motorkhana.course ON course.course_id = run.crs_id;
+            FROM driver
+            JOIN car ON driver.car = car.car_num
+            LEFT JOIN run ON run.dr_id = driver.driver_id
+            JOIN course ON course.course_id = run.crs_id;
             """
     if request.method =='POST':
         sql2 = "WHERE driver.driver_id= %s"
@@ -95,8 +95,8 @@ def listdriversfilter():
     connection = getCursor()
     sql = """ SELECT driver.driver_id
             , concat(driver.first_name,' ',driver.surname) AS driverName
-            FROM motorkhana.driver
-            LEFT JOIN motorkhana.driver as caregiver on driver.caregiver= caregiver.driver_id
+            FROM driver
+            LEFT JOIN driver as caregiver on driver.caregiver= caregiver.driver_id
         ;"""  
     connection.execute(sql)
     dropList = connection.fetchall()
@@ -125,8 +125,8 @@ def overall():
                         IF(COUNT(driver_id) = 6,SUM(course_time),9999) )) BETWEEN 2 AND 5 THEN 'prize'
                 ELSE ''
             END AS Award
-        FROM motorkhana.driver
-        JOIN motorkhana.car ON driver.car = car.car_num
+        FROM driver
+        JOIN car ON driver.car = car.car_num
         LEFT JOIN (
                 SELECT dr_id, crs_id,
                 CASE
@@ -136,11 +136,11 @@ def overall():
                 END AS course_time
                 FROM (
                     SELECT dr_id, crs_id, seconds + IFNULL(cones, 0) * 5 + wd * 10 AS run_total
-                    FROM motorkhana.run
+                    FROM run
                         ) AS run_total
                 GROUP BY dr_id, crs_id
                 ) AS results ON results.dr_id = driver.driver_id
-        JOIN motorkhana.course ON course.course_id = results.crs_id
+        JOIN course ON course.course_id = results.crs_id
         WHERE course_time <> 'dnf'
         GROUP BY driver.driver_id, driver_name;"""
     connection.execute(sql)
@@ -151,11 +151,11 @@ def overall():
 def showgraph():
     connection = getCursor()
     sql = """SELECT driver.driver_id
-        ,if(driver.age is not null,concat(driver.first_name,' ',driver.surname,'(J)')
+        ,IF(driver.age IS NOT NULL,concat(driver.first_name,' ',driver.surname,'(J)')
         ,concat(driver.surname,' ',driver.first_name)) AS driver_name
        , if( count(driver_id) = 6, cast(sum(overresults) as decimal(6,2)),'NQ') AS overall
-        FROM motorkhana.driver
-        JOIN motorkhana.car on driver.car = car.car_num
+        FROM driver
+        JOIN car on driver.car = car.car_num
         LEFT JOIN (select dr_id,
 				        crs_id,
 				        CASE WHEN MIN(run_total) is not null then min(run_total)
@@ -166,11 +166,11 @@ def showgraph():
                             SELECT dr_id,
                             crs_id,
                             seconds + ifnull(cones,0) *5 + wd*10 as run_total 
-                            FROM motorkhana.run) as run_total
+                            FROM run) as run_total
                             GROUP BY dr_id,crs_id
                         ) as reults
         ON reults.dr_id = driver.driver_id
-        JOIN motorkhana.course ON course.course_id = reults.crs_id
+        JOIN course ON course.course_id = reults.crs_id
         WHERE overresults <> 'dnf'
         GROUP BY driver.driver_id
                 ,driver_name
@@ -189,9 +189,9 @@ def showgraph():
 def junior_drivers():
     connection = getCursor()
     sql = """SELECT driver.driver_id,driver.surname, driver.first_name,driver.age,CONCAT(caregiver.first_name ,' ' , caregiver.surname) AS Caregiver
-            FROM motorkhana.driver
-            JOIN motorkhana.CAR on driver.car = CAR.car_num
-            LEFT JOIN motorkhana.driver as caregiver on driver.caregiver= caregiver.driver_id
+            FROM driver
+            JOIN car on driver.car = car.car_num
+            LEFT JOIN driver as caregiver on driver.caregiver= caregiver.driver_id
             WHERE driver.age between 12 and 25
             ORDER BY driver.age desc, driver.surname;"""
     connection.execute(sql)
@@ -205,7 +205,7 @@ def driversearch():
     connection = getCursor()
     sql=""" SELECT driver.driver_id
             , concat(driver.first_name,' ',driver.surname) AS driverName
-            FROM motorkhana.driver
+            FROM driver
             where concat(driver.surname,' ',driver.first_name) like %s
             ;"""
     parameters = (f'%{driverName}%',)
@@ -216,7 +216,7 @@ def driversearch():
 @app.route("/editruns", methods = ["GET","POST"])
 def editruns():
     connection = getCursor()
-    sql = "SELECT * FROM motorkhana.run;"
+    sql = "SELECT * FROM run;"
     connection.execute(sql)
     runData = connection.fetchall()
     
@@ -246,7 +246,7 @@ def editruns():
                             return ("Invaild 'cones' number, please input between 0 and 25.")
                         
                         cur = getCursor()
-                        cur.execute("UPDATE motorkhana.run  SET seconds = %s, cones = %s, wd = %s WHERE dr_id=%s AND crs_id = %s AND run_num=%s;",(run_time, cones,wd ,driver_id,course_id,run_num))
+                        cur.execute("UPDATE run  SET seconds = %s, cones = %s, wd = %s WHERE dr_id=%s AND crs_id = %s AND run_num=%s;",(run_time, cones,wd ,driver_id,course_id,run_num))
                         return "Add Driver run detail successfully"
                     except ValueError :
                         return ("Invaild data please input valid run time or cones.")
@@ -259,13 +259,13 @@ def editruns():
     connection = getCursor()
     sql=""" SELECT driver.driver_id
             , concat(driver.first_name,' ',driver.surname) AS driverName
-            FROM motorkhana.driver
+            FROM driver
             ;"""
     connection.execute(sql)
     driverList = connection.fetchall()
 
     connection = getCursor()
-    sql = """SELECT *  FROM motorkhana.course ;"""
+    sql = """SELECT *  FROM course ;"""
     connection.execute(sql)
     courseList = connection.fetchall()   
     return render_template("editruns.html",driver_list = driverList,course_list = courseList)
@@ -303,7 +303,7 @@ def adddrivers():
             return "Invalid date of birth or wrong date format,please follow 'yyyy-mm-dd'"
 
         connection = getCursor()
-        sql = """INSERT INTO  motorkhana.driver(first_name,surname,date_of_birth,age,caregiver,car)\
+        sql = """INSERT INTO  driver(first_name,surname,date_of_birth,age,caregiver,car)\
                 VALUES(%s,%s,%s,%s,%s,%s);"""
         connection.execute (sql,(first_name,last_name,birthdate,age,caregiver_id,car))
        
@@ -312,26 +312,26 @@ def adddrivers():
         
         connection = getCursor()
         sql = """SELECT *
-            FROM motorkhana.course"""
+            FROM course;"""
         connection.execute(sql)
         courseList = connection.fetchall()
         for course in courseList:
             for run_num in [1,2]:
-                sql = """INSERT INTO motorkhana.run (dr_id,crs_id,run_num,seconds,cones,wd) \
+                sql = """INSERT INTO run (dr_id,crs_id,run_num,seconds,cones,wd) \
                         VALUES(%s,%s,%s,null,null,0);"""
                 connection.execute(sql,(driver_id,course[0],run_num))
         return "Driver added successfully."
 
     connection = getCursor()
     sql = """SELECT *
-            FROM motorkhana.car"""
+            FROM car;"""
     connection.execute(sql)
     carList = connection.fetchall()
 
     connection = getCursor()
     sql=""" SELECT driver.driver_id
             , concat(driver.first_name,' ',driver.surname) AS driverName
-            FROM motorkhana.driver
+            FROM driver
             WHERE driver.age is null
             ;"""
     connection.execute(sql)
