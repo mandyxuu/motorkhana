@@ -62,6 +62,8 @@ def listdrivers():
 def listdriversfilter():
     driver_id = request.form.get('driver')
     driverID = request.args.get('driverid')
+    print(driverID)
+    print(type(driverID))
     connection = getCursor()
     sql1 = """SELECT driver.driver_id
         , CONCAT(driver.first_name,' ',driver.surname) AS driver_name
@@ -76,7 +78,7 @@ def listdriversfilter():
             FROM driver
             JOIN car ON driver.car = car.car_num
             LEFT JOIN run ON run.dr_id = driver.driver_id
-            JOIN course ON course.course_id = run.crs_id;
+            JOIN course ON course.course_id = run.crs_id
             """
     if request.method =='POST':
         sql2 = "WHERE driver.driver_id= %s"
@@ -90,7 +92,9 @@ def listdriversfilter():
     sql3 = "order by driver.driver_id ;"
     sql= sql1 + " " +sql2+" " + sql3
     connection.execute(sql,parameters)
+    print(type(parameters))
     runDetails = connection.fetchall()
+    print(runDetails)
 
     connection = getCursor()
     sql = """ SELECT driver.driver_id
@@ -101,7 +105,7 @@ def listdriversfilter():
     connection.execute(sql)
     dropList = connection.fetchall()
     print(dropList)
-
+    print(runDetails)
     return render_template("dropdriverlist.html", drop_list = dropList,run_details = runDetails,driver_id=driver_id,driverid = driverID)  
   
 @app.route("/overall")
