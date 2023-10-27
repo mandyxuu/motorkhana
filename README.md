@@ -1,6 +1,6 @@
 # motorkhana
 ##Web Application Structure:
-app.route(/) def base():
+-app.route(/) def base() is the home
  --->base.html
 app.route(/admin)--->admin.html
 app.routr(/
