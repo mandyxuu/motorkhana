@@ -20,7 +20,7 @@
             <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
                 min="1998-01-01" max="2011-10-31" >
         </div>
-           
+           <!-- set the max and min date for junior driver apart from this range, dont need to input date of birth-->
         <p>
             <label for = "car">Select a car</label>
             <select id = "car" name = "car" required>
@@ -33,8 +33,8 @@
         <div class="form-control">
             <label for ="caregiver">Select a Caregiver (if you are under 16 years old):</label>
             <select id="caregiver_id" name="caregiver_id">
-                <option value =""></option>
-
+                <option value =""></option> 
+<!-- null option for who doesnt need caregiver -->
                 {% for caregiver in caregiver_list %}
                 <option value ="{{caregiver[0]}}">{{caregiver[1]}}</option>
                 {% endfor %}

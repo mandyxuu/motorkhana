@@ -24,7 +24,8 @@
     {% for driver in driver_list %}
         <tr>
             <td>{{driver[0]}}</td>
-            <td><a href="editruns?driverid={{driver.0}}">{{driver.1}}</a></td>   
+            <td><a href="editruns?driverid={{driver.0}}">{{driver.1}}</a></td>
+            <!-- click the driver name jump to edit run page(GET) -->        
         </tr>
     {% endfor %}
 </table>

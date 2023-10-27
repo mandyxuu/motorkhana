@@ -27,7 +27,8 @@
             <td>{{run.2}}</td>
             <td>
                 {% if run.3 == None %}
-                    <span>dnf</span>
+                    <span>dnf</span> 
+                    <!-- if the run time is none, then dnf(did not finish) -->
                 {% else %}
                     {{ run.3 }}
                 {% endif %}

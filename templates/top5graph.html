@@ -11,8 +11,8 @@
 
     <script>
         // Note SPACE after each fruit name so gap before horizontal bars
-        const runList = {{ value_list | safe }};
-        const driverList = {{name_list | safe}};
+        const runList = {{ value_list | safe }};// value_list is the results of drivers
+        const driverList = {{name_list | safe}};// name_list is driver name
         // REPLACE constants above with passed in variables.
         // Use the '|safe' Jinja filter to mark them as safe (prevents your data being html-escaped). eg,
         // var myList = {{ list_from_py | safe }}

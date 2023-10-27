@@ -37,7 +37,7 @@ def listcourses():
     connection = getCursor()
     connection.execute("SELECT * FROM course;")
     courseList = connection.fetchall()
-    return render_template("courselist.html", course_list = courseList)
+    return render_template("courselist.html", course_list = courseList) #course_list is from courselist.html
 
 @app.route("/listdrivers")
 def listdrivers():
@@ -52,6 +52,7 @@ def listdrivers():
             LEFT JOIN driver AS caregiver ON driver.caregiver= caregiver.driver_id
             ORDER BY driver.surname, driver.first_name
             ;"""
+    # if clause marks junior driver who are 12-25 in the html.
     connection.execute(sql)
     driverList = connection.fetchall()
     print(driverList)
@@ -60,10 +61,8 @@ def listdrivers():
 
 @app.route("/listdrivers/filter", methods = ['GET','POST'])
 def listdriversfilter():
-    driver_id = request.form.get('driver')
-    driverID = request.args.get('driverid')
-    print(driverID)
-    print(type(driverID))
+    driver_id = request.form.get('driver') #post the driver_id from pulldown
+    driverID = request.args.get('driverid') #get the driverid from driverlist
     connection = getCursor()
     sql1 = """SELECT driver.driver_id
         , CONCAT(driver.first_name,' ',driver.surname) AS driver_name
@@ -80,6 +79,7 @@ def listdriversfilter():
             LEFT JOIN run ON run.dr_id = driver.driver_id
             JOIN course ON course.course_id = run.crs_id
             """
+    # note: don't not add';' here, consider below where clause.
     if request.method =='POST':
         sql2 = "WHERE driver.driver_id= %s"
         parameters = (driver_id,)
@@ -92,7 +92,6 @@ def listdriversfilter():
     sql3 = "order by driver.driver_id ;"
     sql= sql1 + " " +sql2+" " + sql3
     connection.execute(sql,parameters)
-    print(type(parameters))
     runDetails = connection.fetchall()
     print(runDetails)
 
@@ -147,6 +146,11 @@ def overall():
         JOIN course ON course.course_id = results.crs_id
         WHERE course_time <> 'dnf'
         GROUP BY driver.driver_id, driver_name;"""
+    # calcuate overall results in mysql, the query is complex, used couples window subqueries, only because the data volumn is small, if for huge volumn, can expolore more effective way.
+    # calcuate the driver's runtotal, then group by select the best course time of driver and mark who did not finish course
+    # join driver>-car>-course>-subquery with best course time,mark junior driver, calcualte the overall reults, use'9999'to mark who did not finish, order by overall results.
+    # rank order by to call top 5 drivers and award 'cup' and 'prize',note, this assess,top5 results are different, if top1 and top2 the same, who can get the'cup'? 
+    # cast to format the run time to decimal point 2
     connection.execute(sql)
     OverList = connection.fetchall()
     return render_template("overall.html", over_all = OverList)
@@ -180,12 +184,14 @@ def showgraph():
                 ,driver_name
         ORDER BY overall
         LIMIT 5;"""
+    # similar to /overall route, but use liimit 5 to display in the bar chart.
     connection.execute(sql)
     top5data = connection.fetchall()
     bestDriverList = [f"{driver[0]} {driver[1]}" for driver in top5data]
+    # get top 5 drivers--> Names should include their ID and a trailing space, eg '133 Oliver Ngatai '
+
     resultsList = [driver[2] for driver in top5data]
-    # Use that to construct 2 lists: bestDriverList containing the names, resultsList containing the final result values
-    # Names should include their ID and a trailing space, eg '133 Oliver Ngatai '
+    # resultsList containing the final result values
 
     return render_template("top5graph.html", name_list = bestDriverList, value_list = resultsList)
 
@@ -198,6 +204,7 @@ def junior_drivers():
             LEFT JOIN driver as caregiver on driver.caregiver= caregiver.driver_id
             WHERE driver.age between 12 and 25
             ORDER BY driver.age desc, driver.surname;"""
+    # get junior driver in mysql
     connection.execute(sql)
     juniorList = connection.fetchall()
     print(juniorList)
@@ -213,6 +220,7 @@ def driversearch():
             where concat(driver.surname,' ',driver.first_name) like %s
             ;"""
     parameters = (f'%{driverName}%',)
+    # partial search for drivername in webpage ('like' is fuzzy match in mysql)
     connection.execute(sql,parameters)
     driverList = connection.fetchall()
     return render_template("driversearch.html", driver_list= driverList,driver_name = driverName)
@@ -232,6 +240,7 @@ def editruns():
         for run in runData:
             print(type(run[3]))
             if run[0]== int(driver_id)and run[1]== course_id and run[2]== int(run_num):
+                # if driver_id, course_id, and run_num match, then if seconds is null, then driver did not finish, admin can update the run details.
                 if run[3] == None:
                     run_time = request.form.get("run_time")
                     cones = request.form.get("cones")
@@ -240,6 +249,7 @@ def editruns():
                     wd = int(wd) if wd == '1' else 0
                     print(cones)
                     print(wd)
+                    # incase the webpage crashed
                     try:
                         run_time = float(run_time)
                         if not(20<=run_time<=500):
@@ -254,6 +264,7 @@ def editruns():
                         return "Add Driver run detail successfully"
                     except ValueError :
                         return ("Invaild data please input valid run time or cones.")
+                    # existing rundetails are not allowed to updated.
         else:
             run_time = request.form.get("run_time",run[2])
             cones= request.form.get("cones",run[3])
@@ -290,15 +301,19 @@ def adddrivers():
 
         try:          
             if date_of_birth:
+                # if date_of_birth is not none,
                 birthdate = datetime.strptime(date_of_birth,"%Y-%m-%d")
+                #format date of birth
                 age = today.year - int(birthdate.year) - ((today.month, today.day)<(int(birthdate.month),int(birthdate.day)))
+                #calcaute the driver age: consider junior or not, caregiver need or not.
                 if 12<= age <=25:
                     age = age
                     birthdate= birthdate
-                    if 12<= age<=16:
+                    if 12<= age<=16: #must have a caregiver
                         caregiver_id = request.form.get("caregiver_id")
                         if not caregiver_id:
-                            return "Junior drivers aged 16 or younger must have a designed caregiver"                    
+                            return "Junior drivers aged 16 or younger must have a designed caregiver"      
+                        #if not a junior don't need input the date of birth and caregiver input.              
             else:
                 birthdate = None
                 age= None
@@ -310,7 +325,8 @@ def adddrivers():
         sql = """INSERT INTO  driver(first_name,surname,date_of_birth,age,caregiver,car)\
                 VALUES(%s,%s,%s,%s,%s,%s);"""
         connection.execute (sql,(first_name,last_name,birthdate,age,caregiver_id,car))
-       
+
+       #get the auto-generated driver_id.
         driver_id = connection.lastrowid
         print(driver_id)
         
@@ -319,6 +335,7 @@ def adddrivers():
             FROM course;"""
         connection.execute(sql)
         courseList = connection.fetchall()
+        # insert 12 blanks run for each new added driver. for -->for loop 
         for course in courseList:
             for run_num in [1,2]:
                 sql = """INSERT INTO run (dr_id,crs_id,run_num,seconds,cones,wd) \
@@ -338,6 +355,7 @@ def adddrivers():
             FROM driver
             WHERE driver.age is null
             ;"""
+    #get the caregiver list, only junior driver has an age
     connection.execute(sql)
     caregiverList = connection.fetchall()
 
