@@ -1,4 +1,15 @@
 # motorkhana
+##Web Application Structure:
+app.route(/) def base():
+ --->base.html
+app.route(/admin)--->admin.html
+app.routr(/
+
+
+
+
+
+
 1. navigation page  9/10/2023 create url and url name in base.html
 2. list of courses add the course images 10/10
 insert the image path in courselist,            <td><img src="/static/{{ course.2}}" alt="" width='200' ></td>
