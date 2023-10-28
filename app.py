@@ -237,8 +237,11 @@ def editruns():
         course_id =request.form.get("course_id")
         run_num = request.form.get("run_num")
         print(driver_id,course_id,run_num)
+        
         for run in runData:
-            print(type(run[3]))
+            # if course missing
+            if course_id == "<Select a course>":
+                return "Please input a valid course."
             if run[0]== int(driver_id)and run[1]== course_id and run[2]== int(run_num):
                 # if driver_id, course_id, and run_num match, then if seconds is null, then driver did not finish, admin can update the run details.
                 if run[3] == None:
@@ -260,7 +263,7 @@ def editruns():
                             cones = int(cones)
                             if not(0 <= cones<= 25):
                                 return ("Invaild 'cones' number, please input between 0 and 25.")
-                        
+                            
                         cur = getCursor()
                         cur.execute("UPDATE run SET seconds = %s, cones = %s, wd = %s WHERE dr_id=%s AND crs_id = %s AND run_num=%s;",(run_time, cones,wd ,driver_id,course_id,run_num))
                         return "Add Driver run detail successfully"
