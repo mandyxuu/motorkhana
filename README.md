@@ -1,33 +1,46 @@
-# motorkhana
-COMP 636 Assessment: BRMM car club runs monthly Motorkhana competitive event.Develop a small website to record and update all driver's run details.
+# Competitive Motorkhana event
+COMP 636 Assessment: BRMM car club runs monthly Motorkhana competitive event. Develop a small website to record and update all driver's run details.
 
 ## Web Application Structure:
 #### app.route(/)-def base() ---> base.html showing the home webpage, as the public link:
-   - List Course: **app.route("/listcourses")--def listcourses():---> courselist.html**
+
+   - List of Courses: **app.route("/listcourses")--def listcourses():---> courselist.html**
+     
      - Fetch all courses, and pass the course_ID and course name from the MySQL Motorkhana database to courselist.html.
-     - Fetch all course images from the 'static/' folder and pass them to courselist.html.
-   - List Driver: **app.route("/listdrivers")--def listdrivers():--->driverlist.html**
+     - Fetch all course images from the 'static' folder and pass them to courselist.html.
+       
+   - List of Drivers: **app.route("/listdrivers")--def listdrivers():--->driverlist.html**
+     
      - Fetch drivers' id, drivers' names, car models, car classes, and junior status. Pass this information to driverlist.html.
-     - fetch, drivers' id, drivers'name,car model, car class,is junior pass to driverlist.html.
-   - Driver Run Details: **app.route("/listdrivers/filter", methods = ['GET','POST'])--def listdriversfilter():--> dropdriverlist.html & driverlist.html**
+  
+   - Driver's Run Details: **app.route("/listdrivers/filter", methods = ['GET','POST'])--def listdriversfilter():<--> dropdriverlist.html & driverlist.html**
+     
       - For GET requests from driverlist.html, retrieve driver details and car details and pass them to dropdriverlist.html.
       - For POST requests from dropdriverlist.html, fetch driver details and car details and pass them to dropdriverlist.html.
+   
    - Overall Results: **app.route("/overall")--def overall():-->overall.html**
+     
      - Retrieve driver run details, such as seconds, cones, and wd, and pass them to overall.html.
    - Top 5 Drivers(bar chart): **app.route("/graph")--def showgraph():--->top5graph.html**
+     
      - Retrieve the top 5 drivers and their results in order. Pass this information to top5graph.html.
 #### app.route(/admin)- def admin() --->admin.html showing the admin page, which is not pubilc:
+
    - Junior Driver List: **app.route("/juniordrivers")--def junior_drivers():-->juniordriver.html**
+     
      - Fetch junior driver details and pass them to juniordriver.html.
-   - Driver Search: **app.route("/driversearch", methods=["GET","POST"])--def driversearch()-->driversearch.html**
+   - Driver Search: **app.route("/driversearch", methods=["GET","POST"])--def driversearch()<-->driversearch.html**
+
      - For GET requests, perform a fuzzy match on driver names, retrieve full driver names, and pass them to driversearch.html.
      - Clicking on a driver name redirects to editruns.html.
-   - Edit Runs: **app.route("/editruns", methods = ["GET","POST"])--def editruns()-->editruns.html**
+   - Edit Runs: **app.route("/editruns", methods = ["GET","POST"])--def editruns()<-->editruns.html**
+
      - For GET requests, fetch driver details and pass them to editruns.html.
      - For POST requests, update driver's run details in the MySQL Motorkhana database.
-   - Add Drivers: **app.route("/adddriver",methods =['GET','POST'])--def adddrivers()-->adddrivers.html**
+   - Add Drivers: **app.route("/adddriver",methods =['GET','POST'])--def adddrivers()<-->adddrivers.html**
+
      - For GET requests, render the adddrivers.html page for inputting new driver information.
-     - For POST requests, insert new driver info and generate 12 blank runs, then INSERT it into the Motorkhana database.
+     - For POST requests, insert new driver info and generate 12 blank runs into the Motorkhana database.
     
 ## Assumptions and Design Decisions:
 
@@ -35,11 +48,9 @@ COMP 636 Assessment: BRMM car club runs monthly Motorkhana competitive event.Dev
 
 In the application project, made the assumption that only consider individuals aged 12 or above, so individuals under the age of 12 is outside of the project scope.
 
-All completed courses have no accidents, such as car crashes or running out of petrol.
+All completed runs have no accidents, such as car crashes or running out of petrol. All the drivers' run times are valid.
 
 Each course only allows two runs with no third run.
-
-All the drivers' run times are valid.
 
 A driver's name may include numbers or special characters, and it's not limited to just 26 letters.
 
@@ -52,7 +63,7 @@ Anyone who is not junior can be a caregiver.
 
 In the navigation section, ensure that 'Rakaia Motorkhana Mavens - Competition Event' serves as the title, making it clear to users the purpose of the webpage. Provide 'Home' and 'Admin' buttons for easy navigation.
 
-This web application employs a flat hierarchy broad layout. It's designed for efficiently displaying course lists, driver lists, driver's run details, overall results, and top 5 drivers.  Users can easily access information without navigating through multiple levels, making it a user-friendly experience. Additionally, administrators have the ability to add and manage data. This ensures a seamless and intuitive experience for administrators, ideal options to add drivers, search for drivers, and edit runs. 
+This web application employs a flat hierarchy broad layout. Users can easily access information without navigating through multiple levels, making it a user-friendly experience.  It's designed for efficiently displaying course lists, driver lists, driver's run details, overall results, and top 5 drivers. Additionally, administrators have the ability to add and manage data. This ensures a seamless and intuitive experience for administrators, ideal options to add drivers, search for drivers, and edit runs. 
 
 ##### List of Driver & Driver's Run Details
 
@@ -70,12 +81,6 @@ The route supports both GET and POST methods. GET fetches driver and course deta
 
 The same method is applied to the adddriver route, with some distinctions. Only junior driver's date of birth and age are visible. To enforce this, age selection for other drivers is disabled by setting the minimum year (1998) and maximum year (2011). Additionally, for drivers aged falls outside the range of 12 to 16, inputting the caregiver ID is blocked. This ensures that caregiver information is entered only when necessary, further streamlining the data entry process.
 
-
-
-
-
-
-
 ## Database questions:
 **What SQL statement creates the car table and defines its three fields/columns? (Copy and paste the relevant lines of SQL.)**
 
@@ -89,8 +94,7 @@ The same method is applied to the adddriver route, with some distinctions. Only 
 
 **Which line of SQL code sets up the relationship between the car and driver tables?**
 
-      FROM driver
-        JOIN car on driver.car = car.car_num
+       on driver.car = car.car_num
       
 **Which 3 lines of SQL code insert the Mini and GR Yaris details into the car table?**
 
@@ -98,35 +102,26 @@ The same method is applied to the adddriver route, with some distinctions. Only 
       (11,'Mini','FWD'),
       (17,'GR Yaris','4WD'),
 
-**Suppose the club wanted to set a default value of ‘RWD’ for the driver_class field. What specific change would you need to make to the SQL to do this? (Do not implement this change in your app.)**
-   - If car table has been created:
+**Suppose the club wanted to set a default value of ‘RWD’ for the drive_class field. What specific change would you need to make to the SQL to do this? (Do not implement this change in your app.)**
 
          ALTER TABLE car ALTER drive_class SET DEFAULT 'RWD';
-   
-   - If need to create a car table:
-
-            CREATE TABLE car (
-             car_num int NOT NULL,
-             car varchar(255) NOT NULL,
-             drive_class varchar(255) DEFAULT 'RWD'
-         );
-
-
                         
 **Suppose logins were implemented. Why is it important for drivers and the club admin to access different routes? As part of your answer, give two specific examples of problems that could occur if all of the web app facilities were available to everyone.**
 
 Implementing separate routes and access controls for drivers and the club admin is crucial for maintaining the security, privacy, and functionality of web application. 
 
-Without access controls, all users could potentially access and modify each other's data.
 
 **Scenario 1**
 
-Anyone might be able to view or alter the personal information (e.g., birthdates) of other drivers. This could lead to privacy violations and potentially misuse of personal data.
+If all facilities were accessible to everyone, there would be a risk of exposing sensitive data to unauthorized users. Driver Jack might be able to view or alter Tina's personal information (e.g.birthdate, age, caregiver name). This could lead to privacy violations and potentially misuse of personal data.
 
 **Scenario 2**
 
 Anyone could add, modify, or delete drivers or runs without proper authorization,compromising the integrity of the data and the fairness of competitions.
+Allowing unrestricted access to web app facilities could lead to unauthorized actions and potential misuse. Mandy who is outside of the club might be able to modify or delete Tina's records, leading to data corruption or disputes.
+
+By segregating access based on user roles (in this case, drivers and club admin), the web app ensures that each user can only perform actions relevant to their role, enhancing security and preventing unauthorized access and data breaches.
 
 ## Image Sources:
 
-Thanks to Sharon for designing all those awesome course images, and a shoutout to our amazing tutors. 
+Thanks to Sharon for designing all those awesome course images, and a shoutout to Richard and our other amazing tutors. 
