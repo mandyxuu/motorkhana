@@ -71,7 +71,7 @@ def listdriversfilter():
         , course.name AS course_name
         , run.run_num 
         , run.seconds
-        , run.cones
+        , IFNULL(run.cones,"") AS cones
         , IF(run.wd =1, "WD","") AS wd
         , IFNULL(ROUND((run.seconds + IFNULL(run.cones,0) *5 + run.wd * 10),2),'dnf')AS run_total
             FROM driver
@@ -146,11 +146,11 @@ def overall():
         JOIN course ON course.course_id = results.crs_id
         WHERE course_time <> 'dnf'
         GROUP BY driver.driver_id, driver_name;"""
-    # calcuate overall results in mysql, the query is complex, used couples window subqueries, only because the data volumn is small, if for huge volumn, can expolore more effective way.
+    # calcuate overall results in mysql, the query is complex, used couples window subqueries, only because the data volumn is small, if for huge volumn, can expolore more efficient way.
     # calcuate the driver's runtotal, then group by select the best course time of driver and mark who did not finish course
     # join driver>-car>-course>-subquery with best course time,mark junior driver, calcualte the overall reults, use'9999'to mark who did not finish, order by overall results.
-    # rank order by to call top 5 drivers and award 'cup' and 'prize',note, this assess,top5 results are different, if top1 and top2 the same, who can get the'cup'? 
-    # cast to format the run time to decimal point 2
+    # rank() order by to call top 5 drivers and award 'cup' and 'prize',note,in this assess,top5 results are different, if top1 and top2 the same, who can get the'cup'? 
+    # cast run time to decimal point 2
     connection.execute(sql)
     OverList = connection.fetchall()
     return render_template("overall.html", over_all = OverList)
@@ -184,7 +184,7 @@ def showgraph():
                 ,driver_name
         ORDER BY overall
         LIMIT 5;"""
-    # similar to /overall route, but use liimit 5 to display in the bar chart.
+    # similar to /overall route, but use liimit 5 to display top 5 results in the bar chart.
     connection.execute(sql)
     top5data = connection.fetchall()
     bestDriverList = [f"{driver[0]} {driver[1]}" for driver in top5data]
@@ -244,7 +244,7 @@ def editruns():
                 if run[3] == None:
                     run_time = request.form.get("run_time")
                     cones = request.form.get("cones")
-                    cones = 0 if cones == "" else cones
+                  #  cones = 0  if cones == "" else cones
                     wd = request.form.get("wd")
                     wd = int(wd) if wd == '1' else 0
                     print(cones)
@@ -252,15 +252,17 @@ def editruns():
                     # incase the webpage crashed
                     try:
                         run_time = float(run_time)
-                        if not(20<=run_time<=500):
+                        if not(20<=run_time<=500): # assume 20 -500 is the valid runtime
                             return ("Invaild 'run time' value, please input between 20 and 500.")
-                        
-                        cones = int(cones)
-                        if not(0 <= cones<= 25):
-                            return ("Invaild 'cones' number, please input between 0 and 25.")
+                        if cones =="":
+                            cones = None
+                        elif cones is not None:
+                            cones = int(cones)
+                            if not(0 <= cones<= 25):
+                                return ("Invaild 'cones' number, please input between 0 and 25.")
                         
                         cur = getCursor()
-                        cur.execute("UPDATE run  SET seconds = %s, cones = %s, wd = %s WHERE dr_id=%s AND crs_id = %s AND run_num=%s;",(run_time, cones,wd ,driver_id,course_id,run_num))
+                        cur.execute("UPDATE run SET seconds = %s, cones = %s, wd = %s WHERE dr_id=%s AND crs_id = %s AND run_num=%s;",(run_time, cones,wd ,driver_id,course_id,run_num))
                         return "Add Driver run detail successfully"
                     except ValueError :
                         return ("Invaild data please input valid run time or cones.")
@@ -282,7 +284,9 @@ def editruns():
     connection = getCursor()
     sql = """SELECT *  FROM course ;"""
     connection.execute(sql)
-    courseList = connection.fetchall()   
+    courseList = connection.fetchall()  
+    
+ 
     return render_template("editruns.html",driver_list = driverList,course_list = courseList)
 
 @app.route("/adddriver",methods =['GET','POST'])
@@ -314,6 +318,9 @@ def adddrivers():
                         if not caregiver_id:
                             return "Junior drivers aged 16 or younger must have a designed caregiver"      
                         #if not a junior don't need input the date of birth and caregiver input.              
+                    else:
+                        # 
+                        return "Anyone under 16 needs a caregiver."
             else:
                 birthdate = None
                 age= None
