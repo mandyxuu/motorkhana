@@ -357,6 +357,7 @@ def adddrivers():
     sql = """ SELECT car_num, concat(model," ",drive_class) AS car_drive_class
             FROM car
            ;"""
+    # merge car and drive_calss to make data clear, eg: MX-5 have RDW and FED.
     connection.execute(sql)
     carList = connection.fetchall()
 
