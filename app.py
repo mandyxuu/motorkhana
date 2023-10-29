@@ -266,7 +266,7 @@ def editruns():
                             
                         cur = getCursor()
                         cur.execute("UPDATE run SET seconds = %s, cones = %s, wd = %s WHERE dr_id=%s AND crs_id = %s AND run_num=%s;",(run_time, cones,wd ,driver_id,course_id,run_num))
-                        return "Add Driver run detail successfully"
+                        return "Add Driver run detail successfully."
                     except ValueError :
                         return ("Invaild data please input valid run time or cones.")
                     # existing rundetails are not allowed to updated.
@@ -319,7 +319,7 @@ def adddrivers():
 
                     if 12<= age<=16: #must have a caregiver
                         if not caregiver_id:
-                            return "Junior drivers aged 16 or younger must have a designed caregiver"      
+                            return "Junior drivers aged 16 or younger must have a designed caregiver."      
                         #if not a junior don't need input the date of birth and caregiver input.                 
                     if age>16 or age <12:
                         if caregiver_id:
@@ -330,11 +330,11 @@ def adddrivers():
                 birthdate = None
                 age= None
                 if caregiver_id:# return warn if user doesn't input date of birth
-                    return "Only under 16 years old needs a caregiver"
+                    return "Only under 16 years old needs a caregiver."
                 else:
                     caregiver_id = None
         except ValueError:
-            return "Invalid date of birth or wrong date format,please follow 'yyyy-mm-dd'"
+            return "Invalid date of birth or wrong date format,please follow 'dd-mm-yyyy'."
         
         connection = getCursor()
         sql = """INSERT INTO  driver(first_name,surname,date_of_birth,age,caregiver,car)\
