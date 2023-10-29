@@ -87,6 +87,8 @@ The same method is applied to the adddriver route, with some distinctions. Only 
 
 To enhance clarity and streamline data management,combined the car model and drive type for the MX-5, which comes in both Rear-Wheel Drive (RWD) and Front-Wheel Drive (FWD) variants.
 
+The pages displaying the lists of courses, drivers, and junior drivers share a similar structure and logic.The top five drivers section employs the same underlying logic. Furthermore, connection established between driver search functionality and the edit runs feature, allowing administrators to seamlessly access and modify driver run details.
+
 ## Database questions:
 **What SQL statement creates the car table and defines its three fields/columns? (Copy and paste the relevant lines of SQL.)**
 
