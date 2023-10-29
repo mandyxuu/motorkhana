@@ -16,6 +16,7 @@
         {% for driver in driver_list %}
             
             <tr {% if driver.4 == 1 %} class="table-warning"{% endif %}>
+                <!-- highliht drivers who are junior -->
                 
                 <td>{{driver.0}}</td>
                 <td><a href="listdrivers/filter?driverid={{driver.0}}">{{driver.1}}</a></td>

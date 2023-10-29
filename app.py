@@ -252,7 +252,7 @@ def editruns():
                     wd = int(wd) if wd == '1' else 0
                     print(cones)
                     print(wd)
-                    # incase the webpage crashed
+                    # in case the webpage crashed
                     try:
                         run_time = float(run_time)
                         if not(20<=run_time<=500): # assume 20 -500 is the valid runtime
@@ -304,7 +304,6 @@ def adddrivers():
         caregiver_id = request.form.get("caregiver_id")
         birthdate = None
         age = None
-        caregiver_id = None
 
         try:          
             if date_of_birth:
@@ -316,21 +315,27 @@ def adddrivers():
                 if 12<= age <=25:
                     age = age
                     birthdate= birthdate
+                    caregiver_id = request.form.get("caregiver_id")
+
                     if 12<= age<=16: #must have a caregiver
-                        caregiver_id = request.form.get("caregiver_id")
                         if not caregiver_id:
                             return "Junior drivers aged 16 or younger must have a designed caregiver"      
-                        #if not a junior don't need input the date of birth and caregiver input.              
-                    else:
-                        # 
-                        return "Anyone under 16 needs a caregiver."
+                        #if not a junior don't need input the date of birth and caregiver input.                 
+                    if age>16 or age <12:
+                        if caregiver_id:
+                            return "Anyone under 16 years old needs a caregiver."
+                        else:
+                            caregiver_id= None              
             else:
                 birthdate = None
                 age= None
-                caregiver_id = None
+                if caregiver_id:# return warn if user doesn't input date of birth
+                    return "Only under 16 years old needs a caregiver"
+                else:
+                    caregiver_id = None
         except ValueError:
             return "Invalid date of birth or wrong date format,please follow 'yyyy-mm-dd'"
-
+        
         connection = getCursor()
         sql = """INSERT INTO  driver(first_name,surname,date_of_birth,age,caregiver,car)\
                 VALUES(%s,%s,%s,%s,%s,%s);"""
