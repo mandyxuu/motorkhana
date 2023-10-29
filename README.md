@@ -54,6 +54,8 @@ Each course permits a maximum of two run attempts, and no third attempt is allow
 
 A driver's name may include numbers or special characters, and it's not limited to just 26 letters.
 
+Driver's name is not mononym.
+
 Anyone who is not junior can be a caregiver.
 
 Valid run times must fall within the range of 20 to 500.
