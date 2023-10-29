@@ -354,8 +354,9 @@ def adddrivers():
         return "Driver added successfully."
 
     connection = getCursor()
-    sql = """SELECT *
-            FROM car;"""
+    sql = """ SELECT car_num, concat(model," ",drive_class) AS car_drive_class
+            FROM car
+           ;"""
     connection.execute(sql)
     carList = connection.fetchall()
 
