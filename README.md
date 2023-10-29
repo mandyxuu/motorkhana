@@ -70,6 +70,8 @@ In the navigation section, ensure that 'Rakaia Motorkhana Mavens - Competition E
 
 This web application employs a flat hierarchy broad layout. Users can easily access information without navigating through multiple levels, making it a user-friendly experience.  It's designed for efficiently displaying course lists, driver lists, driver's run details, overall results, and top 5 drivers. Additionally, administrators have the ability to add and manage data. This ensures a seamless and intuitive experience for administrators, ideal options to add drivers, search for drivers, and edit runs. 
 
+The pages displaying the lists of courses, drivers, and junior drivers share a similar structure and logic.The top five drivers section employs the same underlying logic. Furthermore, connection established between driver search functionality and the edit runs feature, allowing administrators to seamlessly access and modify driver run details.
+
 ##### List of Driver & Driver's Run Details
 
 Leveraged the shared 'Driver's Run Details' functionality for both the 'List of Drivers' and 'Driver's Run Details' views by utilizing the same app.route('/listdrivers/filter'). In this design, gathered arguments from the 'List of Drivers' page (listdriver.html) using GET requests and employed form data from the 'Driver's Run Details' page (dropdriverlist.html) through POST requests and form submissions. Additionally, the driver pulldown on the 'Driver's Run Details' page is linked to app.route('/listdrivers/filter'), while driver details on the 'List of Drivers' page are accessed via app.route("/listdrivers"). This decision promotes code reuse, enhances readability, and maintains a coherent webpage structure.
@@ -86,8 +88,6 @@ The route supports both HTTP Method GET and POST. GET fetches driver and course 
 The same method is applied to the adddriver route, with some distinctions. Only junior driver's date of birth and age are visible. To enforce this, age selection for other drivers is disabled by setting the minimum year (1998) and maximum year (2011). Additionally, for drivers aged falls outside the range of 12 to 16, inputting the caregiver ID is blocked. This ensures that caregiver information is entered only when necessary, further streamlining the data entry process. 
 
 To enhance clarity and streamline data management,combined the car model and drive type for the MX-5, which comes in both Rear-Wheel Drive (RWD) and Front-Wheel Drive (FWD) variants.
-
-The pages displaying the lists of courses, drivers, and junior drivers share a similar structure and logic.The top five drivers section employs the same underlying logic. Furthermore, connection established between driver search functionality and the edit runs feature, allowing administrators to seamlessly access and modify driver run details.
 
 ## Database questions:
 **What SQL statement creates the car table and defines its three fields/columns? (Copy and paste the relevant lines of SQL.)**
