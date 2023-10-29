@@ -15,7 +15,7 @@ COMP 636 Assessment: BRMM car club runs monthly Motorkhana competitive event. A 
   
    - Driver's Run Details: **app.route("/listdrivers/filter", methods = ['GET','POST'])--def listdriversfilter():<--> dropdriverlist.html & driverlist.html**
      
-      - For GET requests from driverlist.html, retrieve driver details and car details and pass them to dropdriverlist.html.
+      - For GET requests from driverlist.html, retrieve driverid and pass them to dropdriverlist.html.
       - For POST requests from dropdriverlist.html, fetch driver details and car details and pass them to dropdriverlist.html.
    
    - Overall Results: **app.route("/overall")--def overall():-->overall.html**
@@ -35,7 +35,7 @@ COMP 636 Assessment: BRMM car club runs monthly Motorkhana competitive event. A 
      - Clicking on a driver name redirects to editruns.html.
    - Edit Runs: **app.route("/editruns", methods = ["GET","POST"])--def editruns()<-->editruns.html**
 
-     - For GET requests,  it retrieves drivers and courses,and renders the "editruns.html" template. This allows users to view the form and the existing data.
+     - For GET requests,  it retrieves drivers and courses,and renders the "editruns.html" template. This allows users to edit runs page.
      - For POST requests, it handles form submissions. It retrieves data from the submitted form, including the driver's ID, course ID, run number, run time, cones, and wd.
    - Add Drivers: **app.route("/adddriver",methods =['GET','POST'])--def adddrivers()<-->adddrivers.html**
 
@@ -74,11 +74,10 @@ This web application employs a flat hierarchy broad layout. Users can easily acc
 
 Leveraged the shared 'Driver's Run Details' functionality for both the 'List of Drivers' and 'Driver's Run Details' views by utilizing the same app.route('/listdrivers/filter'). In this design, gathered arguments from the 'List of Drivers' page (listdriver.html) using GET requests and employed form data from the 'Driver's Run Details' page (dropdriverlist.html) through POST requests and form submissions. Additionally, the driver pulldown on the 'Driver's Run Details' page is linked to app.route('/listdrivers/filter'), while driver details on the 'List of Drivers' page are accessed via app.route("/listdrivers"). This decision promotes code reuse, enhances readability, and maintains a coherent webpage structure.
 
-GET requests are ideal for safe and idempotent operations, primarily data retrieval, without causing side effects on the server. Fetching the list of drivers is a read-only operation that doesn't modify the server's state.
+GET requests are Fetching the list of drivers is a read-only operation that doesn't modify the server's state.
+GET requests can be cached, improving performance by reducing the need to repeatedly fetch the same data, which is valuable to access list of drivers.
 
-GET requests can be cached, improving performance by reducing the need to repeatedly fetch the same data, which is valuable for a frequently accessed list of drivers.
-
-POST requests are commonly used for operations that involve submitting data or actions that may have side effects on the server. When a user selects a driver and submits the form, it triggers an action to fetch the run details for that specific driver.POST requests are well-suited for sending data to the server. It's necessary to submit the selected driver's ID to retrieve specific driver information. POST requests keep sensitive data within the request body, enhancing security by preventing data exposure in URLs.
+POST requests are commonly used for operations that involve submitting data or actions. When a user selects a driver and submits the form, it triggers an action to fetch the run details for that specific driver.POST requests are well-suited for sending data to the server. It's necessary to submit the selected driver's ID to retrieve specific driver information. POST requests keep sensitive data within the request body, enhancing security by preventing data exposure in URLs.
 
 ##### editrun route
 
@@ -86,7 +85,7 @@ The route supports both HTTP Method GET and POST. GET fetches driver and course 
 
 The same method is applied to the adddriver route, with some distinctions. Only junior driver's date of birth and age are visible. To enforce this, age selection for other drivers is disabled by setting the minimum year (1998) and maximum year (2011). Additionally, for drivers aged falls outside the range of 12 to 16, inputting the caregiver ID is blocked. This ensures that caregiver information is entered only when necessary, further streamlining the data entry process. 
 
-To enhance clarity and streamline data management, I've chosen to combine the car model and drive type for the MX-5, which comes in both Rear-Wheel Drive (RWD) and Front-Wheel Drive (FWD) variants. This decision is intended to provide a clearer and more informative identifier for each variant within the web application.
+To enhance clarity and streamline data management,combined the car model and drive type for the MX-5, which comes in both Rear-Wheel Drive (RWD) and Front-Wheel Drive (FWD) variants.
 
 ## Database questions:
 **What SQL statement creates the car table and defines its three fields/columns? (Copy and paste the relevant lines of SQL.)**
@@ -117,7 +116,6 @@ To enhance clarity and streamline data management, I've chosen to combine the ca
 **Suppose logins were implemented. Why is it important for drivers and the club admin to access different routes? As part of your answer, give two specific examples of problems that could occur if all of the web app facilities were available to everyone.**
 
 Implementing separate routes and access controls for drivers and the club admin is crucial for maintaining the security, privacy, and functionality of web application. 
-
 
 **Scenario 1**
 
