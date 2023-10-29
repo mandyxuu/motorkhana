@@ -99,7 +99,7 @@ To enhance clarity and streamline data management, I've chosen to combine the ca
 
 **Which line of SQL code sets up the relationship between the car and driver tables?**
 
-       on driver.car = car.car_num
+       ON driver.car = car.car_num
       
 **Which 3 lines of SQL code insert the Mini and GR Yaris details into the car table?**
 
@@ -109,7 +109,8 @@ To enhance clarity and streamline data management, I've chosen to combine the ca
 
 **Suppose the club wanted to set a default value of ‘RWD’ for the drive_class field. What specific change would you need to make to the SQL to do this? (Do not implement this change in your app.)**
 
-         ALTER TABLE car ALTER drive_class SET DEFAULT 'RWD';
+         ALTER TABLE car 
+         ALTER drive_class SET DEFAULT 'RWD';
                         
 **Suppose logins were implemented. Why is it important for drivers and the club admin to access different routes? As part of your answer, give two specific examples of problems that could occur if all of the web app facilities were available to everyone.**
 
@@ -122,7 +123,6 @@ If all facilities were accessible to everyone, there would be a risk of exposing
 
 **Scenario 2**
 
-Anyone could add, modify, or delete drivers or runs without proper authorization,compromising the integrity of the data and the fairness of competitions.
 Allowing unrestricted access to web app facilities could lead to unauthorized actions and potential misuse. Mandy who is outside of the club might be able to modify or delete Tina's records, leading to data corruption or disputes.
 
 By segregating access based on user roles (in this case, drivers and club admin), the web app ensures that each user can only perform actions relevant to their role, enhancing security and preventing unauthorized access and data breaches.
