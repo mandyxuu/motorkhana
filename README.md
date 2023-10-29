@@ -35,8 +35,8 @@ COMP 636 Assessment: BRMM car club runs monthly Motorkhana competitive event. A 
      - Clicking on a driver name redirects to editruns.html.
    - Edit Runs: **app.route("/editruns", methods = ["GET","POST"])--def editruns()<-->editruns.html**
 
-     - For GET requests, fetch driver details and pass them to editruns.html.
-     - For POST requests, update driver's run details in the MySQL Motorkhana database.
+     - For GET requests,  it retrieves drivers and courses,and renders the "editruns.html" template. This allows users to view the form and the existing data.
+     - For POST requests, it handles form submissions. It retrieves data from the submitted form, including the driver's ID, course ID, run number, run time, cones, and wd.
    - Add Drivers: **app.route("/adddriver",methods =['GET','POST'])--def adddrivers()<-->adddrivers.html**
 
      - For GET requests, render the adddrivers.html page for inputting new driver information.
