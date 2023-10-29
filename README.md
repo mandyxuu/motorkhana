@@ -1,5 +1,5 @@
 # Competitive Motorkhana event
-COMP 636 Assessment: BRMM car club runs monthly Motorkhana competitive event. Develop a small website to record and update all driver's run details.
+COMP 636 Assessment: BRMM car club runs monthly Motorkhana competitive event. A small website developed to record and update drivers and driver's run details.
 
 ## Web Application Structure:
 #### app.route(/)-def base() ---> base.html showing the home webpage, as the public link:
@@ -50,11 +50,14 @@ In the application project, made the assumption that only consider individuals a
 
 All completed runs have no accidents, such as car crashes or running out of petrol. All the drivers' run times are valid.
 
-Each course only allows two runs with no third run.
+Each course permits a maximum of two run attempts, and no third attempt is allowed.
 
 A driver's name may include numbers or special characters, and it's not limited to just 26 letters.
 
 Anyone who is not junior can be a caregiver.
+
+Valid run times must fall within the range of 20 to 500.
+
 
 
 #### Design Decisions
@@ -79,7 +82,9 @@ POST requests are commonly used for operations that involve submitting data or a
 
 The route supports both HTTP Method GET and POST. GET fetches driver and course details for the page, while POST handles form submissions for updating run details. It retrieves data from the database, checks for matching driver's ID, course ID, and run attempt in the database. If a match is found and the run was not completed (seconds is null), administrators can update run details, including run time, cones, and WD. Data validation, including checking the range of run times (20-500) and cones(0-25), and errors due to invalid data are handled using if-else and try-except constructs. If there's no match for the driver's ID, course ID, and run number, or if the run is already completed, a message warns against duplicate entries, ensuring administrators input correct data.
 
-The same method is applied to the adddriver route, with some distinctions. Only junior driver's date of birth and age are visible. To enforce this, age selection for other drivers is disabled by setting the minimum year (1998) and maximum year (2011). Additionally, for drivers aged falls outside the range of 12 to 16, inputting the caregiver ID is blocked. This ensures that caregiver information is entered only when necessary, further streamlining the data entry process.
+The same method is applied to the adddriver route, with some distinctions. Only junior driver's date of birth and age are visible. To enforce this, age selection for other drivers is disabled by setting the minimum year (1998) and maximum year (2011). Additionally, for drivers aged falls outside the range of 12 to 16, inputting the caregiver ID is blocked. This ensures that caregiver information is entered only when necessary, further streamlining the data entry process. 
+
+To enhance clarity and streamline data management, I've chosen to combine the car model and drive type for the MX-5, which comes in both Rear-Wheel Drive (RWD) and Front-Wheel Drive (FWD) variants. This decision is intended to provide a clearer and more informative identifier for each variant within the web application.
 
 ## Database questions:
 **What SQL statement creates the car table and defines its three fields/columns? (Copy and paste the relevant lines of SQL.)**
