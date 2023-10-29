@@ -121,7 +121,7 @@ Implementing separate routes and access controls for drivers and the club admin 
 
 **Scenario 1**
 
-If all facilities were accessible to everyone, there would be a risk of exposing sensitive data to unauthorized users. Driver Jack might be able to view or alter Tina's personal information (e.g.birthdate, age, caregiver name, he could use the confidential information to do soemthing not legal. This could lead to privacy violations and potentially misuse of personal data.
+If all facilities were accessible to everyone, there would be a risk of exposing sensitive data to unauthorized users. Driver Jack might be able to view or alter Tina's personal information (e.g.birthdate, age, caregiver name), he could use the confidential information to do soemthing not legal. This could lead to privacy violations and potentially misuse of personal data.
 
 **Scenario 2**
 
